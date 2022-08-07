@@ -26,7 +26,7 @@ export class UserEntity {
     @Column({ length: 64, nullable: true })
     verificationToken: string;
 
-    @Column({ type: 'int' })
+    @Column({ type: 'int', precision: 2 })
     role: UserRole;
 
     @Column({
