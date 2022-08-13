@@ -1,5 +1,5 @@
-import { USER_INPUT_BOOK_TITLE_MAX_LENGTH, USER_INPUT_BOOK_AUTHOR_FIRST_NAME_MAX_LENGTH, USER_INPUT_BOOK_AUTHOR_LAST_NAME_MAX_LENGTH, USER_INPUT_BOOK_AUTHOR_FIRST_NAME_MIN_LENGTH, USER_INPUT_BOOK_AUTHOR_LAST_NAME_MIN_LENGTH } from './../../consts';
-import { IsDateString, IsNotEmpty, IsString, MaxLength, MinLength } from "class-validator";
+import { USER_INPUT_BOOK_TITLE_MAX_LENGTH, USER_INPUT_BOOK_AUTHOR_FIRST_NAME_MAX_LENGTH, USER_INPUT_BOOK_AUTHOR_LAST_NAME_MAX_LENGTH, USER_INPUT_BOOK_AUTHOR_FIRST_NAME_MIN_LENGTH, USER_INPUT_BOOK_AUTHOR_LAST_NAME_MIN_LENGTH, USER_INPUT_COUNT_OF_AVAILABLE_BOOKS_MAX_NUMBER } from './../../consts';
+import { IsDateString, IsNotEmpty, IsNumber, IsString, Max, MaxLength, Min, MinLength } from "class-validator";
 
 export class CreateBookDto {
     @IsString()
@@ -22,4 +22,10 @@ export class CreateBookDto {
     @IsDateString()
     @IsNotEmpty()
     publishedOn: Date;
+
+    @IsNumber()
+    @IsNotEmpty()
+    @Min(1)
+    @Max(USER_INPUT_COUNT_OF_AVAILABLE_BOOKS_MAX_NUMBER)
+    numberOfAvailable: number
 }
