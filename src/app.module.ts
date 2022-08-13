@@ -19,7 +19,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     database : DB_NAME,
     entities: ["dist/**/**.entity{.ts,.js}"],
     bigNumberStrings: false,
-    logging: true,
+    logging: false,
     synchronize : true,
   }),],
   controllers: [AppController],

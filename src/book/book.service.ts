@@ -1,11 +1,11 @@
 import { SuccessResponse } from './../types';
 import { BookEntity } from './entities/book.entity';
 import { Injectable } from '@nestjs/common';
-import { CreateBookDto } from './dto/create-book.dto';
-import { UpdateBookDto } from './dto/update-book.dto';
+import { CreateBookDto, UpdateBookDto } from './dto/';
 
 @Injectable()
 export class BookService {
+  
   async create(createBookDto: CreateBookDto): Promise<SuccessResponse> {
     const book = new BookEntity()
 
@@ -16,19 +16,29 @@ export class BookService {
     return {isSuccess: true};
   }
 
-  findAll() {
-    return `This action returns all book`;
+  async findAll(): Promise<BookEntity[]> {
+    return await BookEntity.find();
   }
 
   async findOne(id: string): Promise<BookEntity> {
     return await BookEntity.findOne({where: {id}})
   }
 
-  update(id: number, updateBookDto: UpdateBookDto) {
-    return `This action updates a #${id} book`;
+  async update(id: string, updateBookDto: UpdateBookDto): Promise<SuccessResponse>  {
+    const bookToBeUpdated = await this.findOne(id)
+
+    for( const [key, value] of Object.entries(updateBookDto)) {
+      bookToBeUpdated[key] = value
+    }
+
+    await bookToBeUpdated.save()
+    return {isSuccess: true};
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} book`;
+  async remove(id: string) {
+    const bookToBeDeleted = await this.findOne(id);
+    bookToBeDeleted.remove()
+
+    return {isSuccess: true};
   }
 }
