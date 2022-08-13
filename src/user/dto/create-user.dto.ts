@@ -1,6 +1,6 @@
 import { USER_INPUT_FIRSTNAME_MIN_LENGTH, USER_INPUT_FIRSTNAME_MAX_LENGTH, USER_INPUT_LASTNAME_MIN_LENGTH, USER_INPUT_LASTNAME_MAX_LENGTH, USER_INPUT_PASSWORD_MIN_LENGTH, USER_INPUT_PASSWORD_MAX_LENGTH, USER_INPUT_EMAIL_MAX_LENGTH } from './../../consts';
 import { IsEmail, IsNotEmpty, IsString, MaxLength, MinLength } from "class-validator";
-import { MatchDecorator } from "src/utils/decorators/match.decorator";
+import { MatchDecorator } from "src/utils";
 
 export class CreateUserDto {
 

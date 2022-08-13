@@ -1,26 +1,40 @@
+import { UserEntity } from './entities/user.entity';
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { CreateUserDto, UpdateUserDto } from './dto';
+import { UserRole, SuccessResponse } from 'src/types';
 
 @Injectable()
 export class UserService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+
+  async create(createUserDto: CreateUserDto): Promise<SuccessResponse> {
+    const user = new UserEntity();
+
+    for( const [key, value] of Object.entries(createUserDto)) {
+      user[key] = value
+    }
+
+    user.role = UserRole.User;
+
+    await user.save()
+
+    return {isSuccess: true};
   }
 
-  findAll() {
-    return `This action returns all user`;
+  async update(id: string, updateUserDto: UpdateUserDto): Promise<UserEntity> {
+    const userToBeUpdated = await UserEntity.findOne({where: {id}})
+
+    for( const [key, value] of Object.entries(userToBeUpdated)) {
+      userToBeUpdated[key] = value
+    }
+
+    await userToBeUpdated.save()
+    return userToBeUpdated
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
-  }
+  async remove(id: string): Promise<SuccessResponse> {
+    const userToBeDeleted = await UserEntity.findOne({where: {id}})
+    userToBeDeleted.remove()
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+    return {isSuccess: true};
   }
 }
