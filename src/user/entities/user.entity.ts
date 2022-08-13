@@ -1,9 +1,9 @@
-import { UserRole } from '../../types/user/user.type';
+import { UserRole } from '../../types/';
 import { USER_INPUT_EMAIL_MAX_LENGTH, USER_INPUT_FIRSTNAME_MAX_LENGTH, USER_INPUT_LASTNAME_MAX_LENGTH } from './../../consts';
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
-export class UserEntity {
+export class UserEntity extends BaseEntity {
 
     @PrimaryGeneratedColumn('uuid')
     id: string;
