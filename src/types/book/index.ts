@@ -1,1 +1,1 @@
-export * from './success-response'
+export * from '../common/success-response'
