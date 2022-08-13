@@ -1,7 +1,11 @@
 
 export const USER_INPUT_BOOK_TITLE_MAX_LENGTH = 100
 
-export const USER_INPUT_BOOK_AUTHOR_MAX_LENGTH = 50
+export const USER_INPUT_BOOK_AUTHOR_FIRST_NAME_MIN_LENGTH = 2
+export const USER_INPUT_BOOK_AUTHOR_FIRST_NAME_MAX_LENGTH = 35
+
+export const USER_INPUT_BOOK_AUTHOR_LAST_NAME_MIN_LENGTH = 2
+export const USER_INPUT_BOOK_AUTHOR_LAST_NAME_MAX_LENGTH = 35
 
 export const USER_INPUT_FIRSTNAME_MIN_LENGTH = 2; // https://babynames1000.com/three-letter/
 export const USER_INPUT_FIRSTNAME_MAX_LENGTH = 35; // 35 characters recommended in GB for first name. Forename p. 7 https://webarchive.nationalarchives.gov.uk/ukgwa/+/http://www.cabinetoffice.gov.uk/media/254290/GDS%20Catalogue%20Vol%202.pdf
