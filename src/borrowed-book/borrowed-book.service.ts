@@ -17,7 +17,7 @@ export class BorrowedBookService {
       throw new NotFoundException('book has not beed found')
     
 
-    book.numberOfAvailable = book.numberOfAvailable - 1
+    book.numberOfAvailable--;
 
     const borrow = new BorrowedBookEntity();
 
@@ -51,6 +51,16 @@ export class BorrowedBookService {
       .where('userId = :userId', {userId: user.id})
       .andWhere('bookId = :bookId', { bookId: bookId })
       .execute();
+    
+    if(!affected)
+        throw new NotFoundException('book has not beed found')
+
+    const book = await BookEntity.findOne({where: {id: bookId}})
+
+    book.numberOfAvailable++;
+    await book.save()
+
     return {isSuccess: true}
+
   }
 }
