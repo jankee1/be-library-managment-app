@@ -1,5 +1,5 @@
 import { UserRole } from './../../types/user/user.type';
-import { BookedBooksEntity } from './../../book/entities/booked-books.entity';
+import { BorrowedBookEntity } from '../../borrowed-book/entities/borrowed-book.entity';
 import { USER_INPUT_EMAIL_MAX_LENGTH, USER_INPUT_FIRSTNAME_MAX_LENGTH, USER_INPUT_LASTNAME_MAX_LENGTH } from './../../consts';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn, BaseEntity } from "typeorm";
 
@@ -39,7 +39,7 @@ export class UserEntity extends BaseEntity {
     })
     createdAt: Date
 
-    @OneToMany(() => BookedBooksEntity, entity => entity.user)
-    users: BookedBooksEntity[]
+    @OneToMany(() => BorrowedBookEntity, entity => entity.user)
+    users: BorrowedBookEntity[]
 
 }

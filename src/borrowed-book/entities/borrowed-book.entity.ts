@@ -1,10 +1,10 @@
-import { BookEntity } from './book.entity';
-import { UserEntity } from './../../user/entities/user.entity';
+import { BookEntity } from '../../book/entities/book.entity';
+import { UserEntity } from '../../user/entities/user.entity';
 import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 
 @Entity()
-export class BookedBooksEntity extends BaseEntity{
+export class BorrowedBookEntity extends BaseEntity{
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
