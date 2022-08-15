@@ -35,7 +35,7 @@ export class BookService {
     return {isSuccess: true};
   }
 
-  async remove(id: string) {
+  async remove(id: string): Promise<SuccessResponse> {
     const bookToBeDeleted = await this.findOne(id);
     bookToBeDeleted.remove()
 
