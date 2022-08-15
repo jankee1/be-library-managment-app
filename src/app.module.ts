@@ -6,6 +6,7 @@ import { UserModule } from './user/user.module';
 import { BookModule } from './book/book.module';
 import { AdminModule } from './admin/admin.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { BorrowedBookModule } from './borrowed-book/borrowed-book.module';
 
 
 @Module({
@@ -21,7 +22,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     bigNumberStrings: false,
     logging: false,
     synchronize : true,
-  }),],
+  }), BorrowedBookModule,],
   controllers: [AppController],
   providers: [AppService],
 })
