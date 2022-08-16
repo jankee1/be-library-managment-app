@@ -11,7 +11,7 @@ export class CronService {
     private daysBackForFees: Date = new Date(new Date().setDate(new Date().getDate() - this.daysBack))
 
     @Cron("1 0 * * *") // every day at 00:01
-    async calculateFees() {
+    async addFees() {
 
         const borrowedBooks: BorrowedBookEntity[]  = await BorrowedBookEntity.find({
             where: {borrowedAt: LessThan(this.daysBackForFees)},
