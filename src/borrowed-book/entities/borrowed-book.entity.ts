@@ -21,5 +21,8 @@ export class BorrowedBookEntity extends BaseEntity{
     @Column({
         default: ()=> "CURRENT_TIMESTAMP"
     })
-    bookedAt: Date
+    borrowedAt: Date
+
+    @Column({type: 'int'})
+    fees: number
 }
