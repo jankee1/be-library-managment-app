@@ -2,6 +2,7 @@ import { UserEntity } from './entities/user.entity';
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto, UpdateUserDto } from './dto';
 import { UserRole, SuccessResponse } from 'src/types';
+import { hash, genSalt } from 'bcrypt'
 
 @Injectable()
 export class UserService {
@@ -10,7 +11,10 @@ export class UserService {
     const user = new UserEntity();
 
     for( const [key, value] of Object.entries(createUserDto)) {
-      user[key] = value
+      if(key === 'password') {
+        user.passwordHash = await hash(value, await genSalt(10));
+      } else
+        user[key] = value
     }
 
     user.role = UserRole.User;
