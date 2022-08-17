@@ -6,12 +6,12 @@ import { LessThan } from 'typeorm';
 @Injectable()
 export class CronService {
 
-    private additionalFees: number = 1
+    private additionalFees: number = 1 
     private daysBack: number = 30;
     private daysBackForFees: Date = new Date(new Date().setDate(new Date().getDate() - this.daysBack))
 
     @Cron("1 0 * * *") // every day at 00:01
-    async addFees() {
+    async addFees(): Promise<void> {
 
         const borrowedBooks: BorrowedBookEntity[]  = await BorrowedBookEntity.find({
             where: {borrowedAt: LessThan(this.daysBackForFees)},
