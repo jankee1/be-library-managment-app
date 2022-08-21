@@ -1,5 +1,5 @@
 import { UserEntity } from './entities/user.entity';
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { CreateUserDto, UpdateUserDto } from './dto';
 import { UserRole, SuccessResponse } from 'src/types';
 import { hash, genSalt } from 'bcrypt'
@@ -8,6 +8,12 @@ import { hash, genSalt } from 'bcrypt'
 export class UserService {
 
   async create(createUserDto: CreateUserDto): Promise<SuccessResponse> {
+
+    const alreadyExists = await UserEntity.findOne({where: {email: createUserDto.email}})
+
+    if(alreadyExists)
+      throw new ConflictException("user with this email already exists")
+
     const user = new UserEntity();
 
     for( const [key, value] of Object.entries(createUserDto)) {
