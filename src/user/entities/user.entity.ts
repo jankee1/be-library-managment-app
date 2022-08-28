@@ -23,9 +23,6 @@ export class UserEntity extends BaseEntity {
     passwordHash: string;
 
     @Column({ unique: true, nullable: true, default: null })
-    currentHashedAccessToken: string;
-
-    @Column({ unique: true, nullable: true, default: null })
     currentHashedRefreshToken: string;
 
     @Column({ type: 'int', precision: 2 })

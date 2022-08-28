@@ -1,19 +1,38 @@
-import { JWT_SECRET_ACCESS } from './../../../settings';
+import { UserEntity } from './../../user/entities/user.entity';
+import { JwtPayloadDecoded } from './../../types/auth/jwt.payload';
+import { JWT_SECRET_ACCESS_TOKEN } from './../../../settings';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/common';
+
 
 @Injectable()
 export class JwtAccessStrategy extends PassportStrategy(Strategy, 'jwt-access') {
+
+  secondMultiplier:number = 1000 // 1000ms = 1s
+
   constructor() {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      ignoreExpiration: false,
-      secretOrKey: JWT_SECRET_ACCESS
+      ignoreExpiration: true,
+      secretOrKey: JWT_SECRET_ACCESS_TOKEN,
     });
   }
+ 
+  async validate(payload: JwtPayloadDecoded): Promise<UserEntity> {
+    const expiration = payload.exp * this.secondMultiplier;
+    if (expiration < Date.now()) {
+      throw new ForbiddenException('access token is expired');
+    }
 
-  async validate(payload: any) {
-    return { userId: payload.sub, username: payload.username };
+    const user = await UserEntity.findOne({
+      where: { id: payload.userId, email: payload.email },
+    });
+
+    if (!user) 
+      throw new UnauthorizedException();
+    
+    return user;
   }
+
 }

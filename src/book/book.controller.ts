@@ -1,6 +1,7 @@
+import { JwtAccessGuard } from './../utils/guards/jwt-access.guard';
 import { BookEntity } from './entities/book.entity';
 import { SuccessResponse } from './../types/common/success-response';
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe, UseGuards } from '@nestjs/common';
 import { BookService } from './book.service';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
@@ -13,7 +14,7 @@ export class BookController {
   create(@Body() createBookDto: CreateBookDto): Promise<SuccessResponse> {
     return this.bookService.create(createBookDto);
   }
-
+  @UseGuards(JwtAccessGuard)
   @Get()
   findAll(): Promise<BookEntity[]> {
     return this.bookService.findAll();
