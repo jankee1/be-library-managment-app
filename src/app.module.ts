@@ -9,6 +9,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { BorrowedBookModule } from './borrowed-book/borrowed-book.module';
 import { CronModule } from './cron/cron.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { AuthModule } from './auth/auth.module';
 
 
 @Module({
@@ -25,7 +26,8 @@ import { ScheduleModule } from '@nestjs/schedule';
     logging: false,
     synchronize : true,
   }), BorrowedBookModule, CronModule,
-  ScheduleModule.forRoot()
+  ScheduleModule.forRoot(),
+  AuthModule
   ],
   controllers: [AppController],
   providers: [AppService],

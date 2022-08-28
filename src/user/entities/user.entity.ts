@@ -23,10 +23,7 @@ export class UserEntity extends BaseEntity {
     passwordHash: string;
 
     @Column({ unique: true, nullable: true, default: null })
-    refreshTokenHash: string;
-
-    @Column({ length: 64, nullable: true })
-    verificationToken: string;
+    currentHashedRefreshToken: string;
 
     @Column({ type: 'int', precision: 2 })
     role: UserRole;
