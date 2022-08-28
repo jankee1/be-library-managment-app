@@ -1,3 +1,4 @@
+import { AuthService } from './../auth.service';
 import { UserEntity } from './../../user/entities/user.entity';
 import { JwtPayloadDecoded } from './../../types/auth/jwt.payload';
 import { JWT_SECRET_ACCESS_TOKEN } from './../../../settings';
@@ -11,7 +12,9 @@ export class JwtAccessStrategy extends PassportStrategy(Strategy, 'jwt-access') 
 
   secondMultiplier:number = 1000 // 1000ms = 1s
 
-  constructor() {
+  constructor(
+    private readonly authService: AuthService
+  ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: true,
@@ -19,7 +22,7 @@ export class JwtAccessStrategy extends PassportStrategy(Strategy, 'jwt-access') 
     });
   }
  
-  async validate(payload: JwtPayloadDecoded): Promise<UserEntity> {
+  async validate(payload: JwtPayloadDecoded) {
     const expiration = payload.exp * this.secondMultiplier;
     if (expiration < Date.now()) {
       throw new ForbiddenException('access token is expired');
@@ -32,7 +35,7 @@ export class JwtAccessStrategy extends PassportStrategy(Strategy, 'jwt-access') 
     if (!user) 
       throw new UnauthorizedException();
     
-    return user;
+    return this.authService.filterUserData(user);
   }
 
 }

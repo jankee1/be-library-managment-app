@@ -14,7 +14,7 @@ export class BookController {
   create(@Body() createBookDto: CreateBookDto): Promise<SuccessResponse> {
     return this.bookService.create(createBookDto);
   }
-  @UseGuards(JwtAccessGuard)
+  // @UseGuards(JwtAccessGuard)
   @Get()
   findAll(): Promise<BookEntity[]> {
     return this.bookService.findAll();
