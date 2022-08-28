@@ -1,3 +1,4 @@
+import { LogoutResponse } from './../types/auth/logout.response';
 import { UserEntity } from 'src/user/entities/user.entity';
 import { LoginResponse } from './../types/auth/login.response';
 import { LoginDto } from './dto/login.dto';
@@ -22,11 +23,13 @@ export class AuthController {
     }
 
     @Get('logout')
-    async logout() {
-
+    async logout(
+        @Res({ passthrough: true }) res: Response,
+        @GetUser() user: UserEntity,
+    ): Promise<LogoutResponse>  {
+        return this.authService.logout(res, user)
     }
 
-    @IsPublic()
     @UseGuards(JwtRefreshGuard)
     @Get('refresh')
     async refresh(

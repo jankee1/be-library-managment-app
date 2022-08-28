@@ -1,10 +1,11 @@
+import { LogoutResponse } from './../types/auth/logout.response';
 import { LoginResponse } from './../types/auth/login.response';
 import { JwtPayload } from './../types/auth/jwt.payload';
 import { JwtTokens } from '../types/auth/jwt.tokens';
 import { JWT_SECRET_ACCESS_TOKEN, JWT_SECRET_REFRESH_TOKEN, JWT_SECRET_REFRESH_EXPIRATION, JWT_SECRET_ACCESS_EXPIRATION, JWT_REFRESH_TOKEN_COOKIE } from './../../settings';
 import { LoginDto } from './dto/login.dto';
 import { UserEntity } from './../user/entities/user.entity';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, Res } from '@nestjs/common';
 import { compare, hash } from 'bcrypt'
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
@@ -36,8 +37,17 @@ export class AuthService {
       };
     }
 
-    async logout() {
+    async logout(res: Response, user: UserEntity): Promise<LogoutResponse> {
+      user.currentHashedRefreshToken = null;
+      await user.save()
 
+      res.clearCookie(JWT_REFRESH_TOKEN_COOKIE, {
+        httpOnly: true,
+        sameSite: 'none',
+        secure: true,
+      });
+
+      return {isSuccess: true}
     }
 
 
