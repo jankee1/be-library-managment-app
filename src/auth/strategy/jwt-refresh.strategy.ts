@@ -1,19 +1,20 @@
+import { compare } from 'bcrypt';
+import { UserEntity } from 'src/user/entities/user.entity';
 import { JwtPayloadDecoded } from './../../types/auth/jwt.payload';
-import { JWT_REFRESH_TOKEN_COOKIE, JWT_SECRET_ACCESS_TOKEN } from './../../../settings';
+import { JWT_REFRESH_TOKEN_COOKIE, JWT_SECRET_REFRESH_TOKEN } from './../../../settings';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { Request } from 'express';
 
 @Injectable()
 export class JwtRefreshTokenStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {
-  constructor(
-    ) {
+  constructor() {
       super({
         jwtFromRequest: ExtractJwt.fromExtractors([(request: Request) => {
           return request?.cookies?.[JWT_REFRESH_TOKEN_COOKIE];
         }]),
-        secretOrKey: JWT_SECRET_ACCESS_TOKEN,
+        secretOrKey: JWT_SECRET_REFRESH_TOKEN,
         passReqToCallback: true,
         ignoreExpiration: false,
       });
@@ -21,7 +22,15 @@ export class JwtRefreshTokenStrategy extends PassportStrategy(Strategy, 'jwt-ref
 
   async validate(request: Request, payload: JwtPayloadDecoded) {
     console.log(payload)
-    const refreshToken = request.cookies?.[JWT_REFRESH_TOKEN_COOKIE];
-    // return this.userService.getUserIfRefreshTokenMatches(refreshToken, payload.userId);
+    const refreshToken = request?.cookies?.[JWT_REFRESH_TOKEN_COOKIE];
+    
+    const user = await UserEntity.findOne({
+      where: { id: payload.userId, email: payload.email },
+    });
+
+    if (!user || ! await compare(refreshToken, user.currentHashedRefreshToken)) 
+      throw new UnauthorizedException();
+
+    return user;
   }
 }

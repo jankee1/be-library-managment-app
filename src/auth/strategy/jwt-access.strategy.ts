@@ -24,9 +24,9 @@ export class JwtAccessStrategy extends PassportStrategy(Strategy, 'jwt-access') 
  
   async validate(payload: JwtPayloadDecoded) {
     const expiration = payload.exp * this.secondMultiplier;
-    if (expiration < Date.now()) {
+    if (expiration < Date.now()) 
       throw new ForbiddenException('access token is expired');
-    }
+    
 
     const user = await UserEntity.findOne({
       where: { id: payload.userId, email: payload.email },

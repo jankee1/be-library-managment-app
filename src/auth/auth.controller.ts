@@ -1,8 +1,10 @@
+import { UserEntity } from 'src/user/entities/user.entity';
+import { LoginResponse } from './../types/auth/login.response';
 import { LoginDto } from './dto/login.dto';
 import { AuthService } from './auth.service';
-import { Body, Controller, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, Post, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
-import { IsPublic } from 'src/utils';
+import { GetUser, IsPublic, JwtRefreshGuard } from 'src/utils';
 
 
 @Controller('auth')
@@ -15,17 +17,22 @@ export class AuthController {
     async login(
         @Res({ passthrough: true }) res: Response,
         @Body() loginDto: LoginDto,
-    ) {
+    ): Promise <LoginResponse> {
         return await this.authService.login(res, loginDto)
     }
 
-    @Post('logout')
+    @Get('logout')
     async logout() {
 
     }
 
-    @Post('refresh')
-    async refresh() {
-
+    @IsPublic()
+    @UseGuards(JwtRefreshGuard)
+    @Get('refresh')
+    async refresh(
+        @Res({ passthrough: true }) res: Response,
+        @GetUser() user: UserEntity,
+    ): Promise <LoginResponse> {
+        return await this.authService.refresh(res, user)
     }
 }

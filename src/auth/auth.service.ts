@@ -1,3 +1,4 @@
+import { LoginResponse } from './../types/auth/login.response';
 import { JwtPayload } from './../types/auth/jwt.payload';
 import { JwtTokens } from '../types/auth/jwt.tokens';
 import { JWT_SECRET_ACCESS_TOKEN, JWT_SECRET_REFRESH_TOKEN, JWT_SECRET_REFRESH_EXPIRATION, JWT_SECRET_ACCESS_EXPIRATION, JWT_REFRESH_TOKEN_COOKIE } from './../../settings';
@@ -17,7 +18,7 @@ export class AuthService {
 
     // core methods
 
-    async login(res: Response, loginDto: LoginDto) {
+    async login(res: Response, loginDto: LoginDto): Promise <LoginResponse> {
       const user = await this.validateUser(loginDto.email, loginDto.password)
 
       const payload = { userId: user.id, email: user.email} as JwtPayload;
@@ -31,7 +32,7 @@ export class AuthService {
 
       return {
         ...this.filterUserData(user),
-        jwt_access_token: tokens.accessToken
+        jwtAccessToken: tokens.accessToken
       };
     }
 
@@ -40,23 +41,32 @@ export class AuthService {
     }
 
 
-    async refresh() {
-
+    async refresh(res: Response, user: UserEntity): Promise <LoginResponse> {
+        const { accessToken, refreshToken } = await this.generateNewTokens({
+          userId: user.id,
+          email: user.email
+        });
+        user.currentHashedRefreshToken = await hash(refreshToken,10)
+        await user.save();
+        this.setRefreshCookieSecureAndHttpOnly(res, refreshToken);
+        return { ...this.filterUserData(user), jwtAccessToken: accessToken };
     }
 
     // helper methods
 
     async generateNewTokens(payload: JwtPayload): Promise<JwtTokens> {
-      return  {
-        accessToken: this.jwtService.sign(payload, {
+      const [accessToken, refreshToken] = await Promise.all([
+        this.jwtService.sign(payload, {
           secret: JWT_SECRET_ACCESS_TOKEN,
           expiresIn: `${JWT_SECRET_ACCESS_EXPIRATION}ms`
         }),
-        refreshToken: this.jwtService.sign(payload, {
+        this.jwtService.sign(payload, {
           secret: JWT_SECRET_REFRESH_TOKEN,
           expiresIn: `${JWT_SECRET_REFRESH_EXPIRATION}ms`,
-        })
-      }
+        }),
+      ]);
+
+      return { accessToken, refreshToken };
     }
 
     filterUserData(user: UserEntity) {
