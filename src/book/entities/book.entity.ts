@@ -1,5 +1,5 @@
 import { BorrowedBookEntity } from '../../borrowed-book/entities/borrowed-book.entity';
-import { USER_INPUT_BOOK_TITLE_MAX_LENGTH, USER_INPUT_BOOK_AUTHOR_FIRST_NAME_MAX_LENGTH, USER_INPUT_BOOK_AUTHOR_LAST_NAME_MAX_LENGTH } from './../../consts';
+import { USER_INPUT_BOOK_TITLE_MAX_LENGTH, USER_INPUT_BOOK_AUTHOR_FIRST_NAME_MAX_LENGTH, USER_INPUT_BOOK_AUTHOR_LAST_NAME_MAX_LENGTH } from '../../types/consts/consts';
 import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()

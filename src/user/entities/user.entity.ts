@@ -1,6 +1,6 @@
 import { UserRole } from './../../types/user/user.type';
 import { BorrowedBookEntity } from '../../borrowed-book/entities/borrowed-book.entity';
-import { USER_INPUT_EMAIL_MAX_LENGTH, USER_INPUT_FIRSTNAME_MAX_LENGTH, USER_INPUT_LASTNAME_MAX_LENGTH } from './../../consts';
+import { USER_INPUT_EMAIL_MAX_LENGTH, USER_INPUT_FIRSTNAME_MAX_LENGTH, USER_INPUT_LASTNAME_MAX_LENGTH } from '../../types/consts/consts';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn, BaseEntity } from "typeorm";
 
 

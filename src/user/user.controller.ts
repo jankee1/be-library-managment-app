@@ -4,11 +4,13 @@ import { Controller, Post, Body, Patch, Param, Delete, ParseUUIDPipe } from '@ne
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { IsPublic } from 'src/utils';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @IsPublic()
   @Post()
   create(@Body() createUserDto: CreateUserDto): Promise<SuccessResponse> {
     return this.userService.create(createUserDto);
