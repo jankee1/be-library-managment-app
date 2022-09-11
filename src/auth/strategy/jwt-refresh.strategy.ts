@@ -4,13 +4,11 @@ import { JwtPayloadDecoded } from './../../types/auth/jwt.payload';
 import { JWT_REFRESH_TOKEN_COOKIE, JWT_SECRET_REFRESH_TOKEN } from './../../../settings';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable, UnauthorizedException, ForbiddenException } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { Request } from 'express';
 
 @Injectable()
 export class JwtRefreshTokenStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {
-
-  secondMultiplier:number = 1000 // 1000ms = 1s
 
   constructor() {
       super({
