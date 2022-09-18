@@ -2,7 +2,7 @@ import { BorrowedBookUserType } from './../types';
 import { SuccessResponse } from '../types/common/success-response';
 import { BorrowedBookEntity } from './entities/borrowed-book.entity';
 import { BookEntity } from '../book/entities/book.entity';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { CreateBorrowedBookDto } from './dto/create-borrowed-book.dto';
 import { UserEntity } from 'src/user/entities/user.entity';
 import { DataSource, FindOptionsWhere } from 'typeorm';
@@ -17,7 +17,11 @@ export class BorrowedBookService {
     if(!book || book.numberOfAvailable === 0)
       throw new NotFoundException('book has not beed found')
     
+    const alreadyBorrowed = await BorrowedBookEntity.find({where: {user: user as FindOptionsWhere<UserEntity>, book: book as FindOptionsWhere<BookEntity> }})
 
+    if(alreadyBorrowed.length > 0) 
+      throw new ConflictException('selected book has been already borrowed')
+    
     book.numberOfAvailable--;
 
     const borrow = new BorrowedBookEntity();

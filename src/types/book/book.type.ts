@@ -1,7 +1,7 @@
 import { BookEntity } from './../../book/entities/book.entity';
 
 
-export type BookType = Pick<BookEntity,  
+type Book = Pick<BookEntity,  
     "id" |
     "title" |
     "authorFirstName" |
@@ -9,3 +9,5 @@ export type BookType = Pick<BookEntity,
     "publishedOn" |
     "numberOfAvailable"
 >
+
+export type BookType = Book & {isBorrowed: boolean}
