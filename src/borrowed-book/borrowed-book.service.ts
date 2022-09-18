@@ -37,7 +37,8 @@ export class BorrowedBookService {
     const borrowedBooks = await BorrowedBookEntity.find({where: {user: user as FindOptionsWhere<UserEntity>}})
 
     return borrowedBooks.map(item => ({
-        id: item.id,
+        borrowId: item.id,
+        bookId: item.book.id,
         borrowDate: item.borrowedAt.toLocaleDateString(),
         additionalFees: item.fees,
         title: item.book.title,
