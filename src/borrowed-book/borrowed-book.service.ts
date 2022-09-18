@@ -1,10 +1,11 @@
+import { BorrowedBookUserType } from './../types';
 import { SuccessResponse } from '../types/common/success-response';
 import { BorrowedBookEntity } from './entities/borrowed-book.entity';
 import { BookEntity } from '../book/entities/book.entity';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateBorrowedBookDto } from './dto/create-borrowed-book.dto';
 import { UserEntity } from 'src/user/entities/user.entity';
-import { DataSource } from 'typeorm';
+import { DataSource, FindOptionsWhere } from 'typeorm';
 
 @Injectable()
 export class BorrowedBookService {
@@ -31,16 +32,18 @@ export class BorrowedBookService {
 
   }
 
-  async findAll(user: UserEntity): Promise<BorrowedBookEntity> {
-    console.log('space')
-    const books = await this.dataSource
-    .createQueryBuilder()
-    .select()
-    .from(BorrowedBookEntity, "book")
-    .where("userId = :userId", {userId: user.id})
-    .execute()
+  async findAll(user: UserEntity): Promise<BorrowedBookUserType[]> {
 
-    return books;
+    const borrowedBooks = await BorrowedBookEntity.find({where: {user: user as FindOptionsWhere<UserEntity>}})
+
+    return borrowedBooks.map(item => ({
+        id: item.id,
+        borrowDate: item.borrowedAt.toLocaleDateString(),
+        additionalFees: item.fees,
+        title: item.book.title,
+        author: `${item.book.authorFirstName} ${item.book.authorLastName}`
+      }
+    ))
   }
 
   async remove(user: UserEntity, bookId: string): Promise<SuccessResponse> {
