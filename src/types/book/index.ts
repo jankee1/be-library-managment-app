@@ -1,1 +1,1 @@
-export * from '../common/success-response'
+export * from './book.type'

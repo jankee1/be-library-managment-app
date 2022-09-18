@@ -30,6 +30,7 @@ export class AuthController {
         return this.authService.logout(res, user)
     }
 
+    @IsPublic()
     @UseGuards(JwtRefreshGuard)
     @Get('refresh')
     async refresh(

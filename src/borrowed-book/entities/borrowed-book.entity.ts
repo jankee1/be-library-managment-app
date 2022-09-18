@@ -23,6 +23,6 @@ export class BorrowedBookEntity extends BaseEntity{
     })
     borrowedAt: Date
 
-    @Column({type: 'int'})
+    @Column({type: 'int', default: 0})
     fees: number
 }
