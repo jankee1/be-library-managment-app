@@ -1,4 +1,4 @@
-import { BorrowedBookUserType } from './../types';
+import { BorrowedBookUserType, BorrowedBookItemForStats } from './../types';
 import { SuccessResponse } from '../types/common/success-response';
 import { BorrowedBookEntity } from './entities/borrowed-book.entity';
 import { BookEntity } from '../book/entities/book.entity';
@@ -72,7 +72,28 @@ export class BorrowedBookService {
 
   }
 
-  async findAllForStats() {
-    
+  async findAllForStats(): Promise<BorrowedBookItemForStats[] > {
+    const borrowedBooks = await BorrowedBookEntity.find()
+
+    return this.filterBooksForStats(borrowedBooks)
+  }
+
+  filterBooksForStats(borrowedBooks: BorrowedBookEntity[]): BorrowedBookItemForStats[] {
+    const boorwedBooksFiltered = borrowedBooks.map(item => {
+        return {
+          borrowId: item.id,
+          userId: item.user.id,
+          userFirstName: item.user.firstName,
+          userLastName: item.user.lastName,
+          userEmail: item.user.email,
+          userfees: item.user.fees,
+          bookId: item.book.id,
+          bookTitle: item.book.title,
+          bookAuthorFirstName: item.book.authorFirstName,
+          bookAuthorLastName: item.book.authorLastName,
+        }
+    })
+
+    return boorwedBooksFiltered
   }
 }

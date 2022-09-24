@@ -1,4 +1,4 @@
-import { BorrowedBookUserType, UserRole } from './../types';
+import { BorrowedBookUserType, UserRole, BorrowedBookItemForStats } from './../types';
 import { SuccessResponse } from './../types/common/success-response';
 import { UserEntity } from 'src/user/entities/user.entity';
 import { Controller, Get, Post, Body, Delete, Param, ParseUUIDPipe } from '@nestjs/common';
@@ -37,8 +37,7 @@ export class BorrowedBookController {
 
   @AccessRole(UserRole.Admin)
   @Get('stats')
-  async findAllForStats() {
-    // return this.borrowedBooksService.findAllForStats();
-    return "admin"
+  async findAllForStats(): Promise<BorrowedBookItemForStats[]> {
+    return this.borrowedBooksService.findAllForStats();
   }
 }
