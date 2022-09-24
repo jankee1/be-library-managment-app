@@ -1,10 +1,9 @@
-import { UserEntity } from 'src/user/entities/user.entity';
+import { Body, Controller, Delete, Param, ParseUUIDPipe, Patch, Post } from '@nestjs/common';
+import { IsPublic } from 'src/utils';
 import { SuccessResponse } from './../types/common/success-response';
-import { Controller, Post, Body, Patch, Param, Delete, ParseUUIDPipe } from '@nestjs/common';
-import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { IsPublic } from 'src/utils';
+import { UserService } from './user.service';
 
 @Controller('user')
 export class UserController {
@@ -17,7 +16,7 @@ export class UserController {
   }
 
   @Patch(':id')
-  update(@Param('id', ParseUUIDPipe) id: string, @Body() updateUserDto: UpdateUserDto): Promise<UserEntity> {
+  update(@Param('id', ParseUUIDPipe) id: string, @Body() updateUserDto: UpdateUserDto): Promise<SuccessResponse> {
     return this.userService.update(id, updateUserDto);
   }
 

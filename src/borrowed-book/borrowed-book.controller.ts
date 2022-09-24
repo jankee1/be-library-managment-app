@@ -1,10 +1,11 @@
-import { BorrowedBookUserType } from './../types';
+import { BorrowedBookUserType, UserRole } from './../types';
 import { SuccessResponse } from './../types/common/success-response';
 import { UserEntity } from 'src/user/entities/user.entity';
 import { Controller, Get, Post, Body, Delete, Param, ParseUUIDPipe } from '@nestjs/common';
 import { BorrowedBookService } from './borrowed-book.service';
 import { CreateBorrowedBookDto } from './dto/create-borrowed-book.dto';
 import { GetUser } from 'src/utils';
+import { AccessRole } from 'src/utils/decorators/access-role.decorator';
 
 @Controller('borrowed-books')
 export class BorrowedBookController {
@@ -22,6 +23,7 @@ export class BorrowedBookController {
   async findAll(
     @GetUser() user: UserEntity
   ): Promise<BorrowedBookUserType[]>{
+    
     return this.borrowedBooksService.findAll(user);
   }
 
@@ -31,5 +33,12 @@ export class BorrowedBookController {
     @GetUser() user: UserEntity
   ): Promise<SuccessResponse> {
     return this.borrowedBooksService.remove(user, bookId);
+  }
+
+  @AccessRole(UserRole.Admin)
+  @Get('stats')
+  async findAllForStats() {
+    // return this.borrowedBooksService.findAllForStats();
+    return "admin"
   }
 }

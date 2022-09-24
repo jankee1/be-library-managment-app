@@ -11,3 +11,5 @@ type Book = Pick<BookEntity,
 >
 
 export type BookType = Book & {isBorrowed: boolean}
+export type BookEdited = Omit<Book, "id">
+export type BookNew = Omit<Book, "id">

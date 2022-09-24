@@ -71,4 +71,8 @@ export class BorrowedBookService {
     return {isSuccess: true}
 
   }
+
+  async findAllForStats() {
+    
+  }
 }

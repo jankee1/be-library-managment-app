@@ -1,3 +1,5 @@
+import { FEE_PER_DAY } from './../types/consts/consts';
+import { DAYS_TO_BORROW_BOOK_FROM_LIBRARY } from './../types/';
 import { BorrowedBookEntity } from './../borrowed-book/entities/borrowed-book.entity';
 import { Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
@@ -6,9 +8,7 @@ import { LessThan } from 'typeorm';
 @Injectable()
 export class CronService {
 
-    private additionalFees: number = 1 
-    private daysBack: number = 30;
-    private daysBackForFees: Date = new Date(new Date().setDate(new Date().getDate() - this.daysBack))
+    private daysBackForFees: Date = new Date(new Date().setDate(new Date().getDate() - DAYS_TO_BORROW_BOOK_FROM_LIBRARY))
 
     @Cron("1 0 * * *") // every day at 00:01
     async addFees(): Promise<void> {
@@ -18,7 +18,7 @@ export class CronService {
         })
 
         for(const book of borrowedBooks) {
-            book.fees = book.fees + this.additionalFees
+            book.fees = book.fees + FEE_PER_DAY
             await book.save();
         }
     }
