@@ -30,15 +30,15 @@ export class UserService {
     return {isSuccess: true};
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto): Promise<UserEntity> {
+  async update(id: string, updateUserDto: UpdateUserDto): Promise<SuccessResponse> {
     const userToBeUpdated = await UserEntity.findOne({where: {id}})
 
-    for( const [key, value] of Object.entries(userToBeUpdated)) {
+    for( const [key, value] of Object.entries(updateUserDto)) {
       userToBeUpdated[key] = value
     }
 
     await userToBeUpdated.save()
-    return userToBeUpdated
+    return {isSuccess: true};
   }
 
   async remove(id: string): Promise<SuccessResponse> {

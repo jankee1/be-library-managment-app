@@ -4,7 +4,7 @@ export interface LoginResponse {
 	lastName: string
 	email: string
 	role: number
-	bookedBooks: number
+	fees: number
 	createdAt: Date
 	jwtAccessToken: string
 }

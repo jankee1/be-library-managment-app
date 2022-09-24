@@ -18,3 +18,6 @@ export const USER_INPUT_EMAIL_MAX_LENGTH = 254; // total number of user input + 
 
 export const USER_INPUT_PASSWORD_MIN_LENGTH = 8;
 export const USER_INPUT_PASSWORD_MAX_LENGTH = 64; // min and max password length - https://www.auditboard.com/blog/nist-password-guidelines/
+
+export const DAYS_TO_BORROW_BOOK_FROM_LIBRARY = 30;
+export const FEE_PER_DAY = 2;

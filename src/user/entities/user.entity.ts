@@ -28,8 +28,8 @@ export class UserEntity extends BaseEntity {
     @Column({ type: 'int', precision: 2 })
     role: UserRole;
 
-    @Column({type: 'int', width: 1, default: 0})
-    bookedBooks: number 
+    @Column({type: 'int', default: 0})
+    fees: number 
 
     @Column({
         default: () => 'CURRENT_TIMESTAMP',
